@@ -137,14 +137,14 @@ function App() {
                 <button
                     onClick={(event) => handleDeleteV1(event, todo.taskdescription)}
                 >
-                  ✔️ v1
+                  ✔️
                 </button>
 
                 {/* NEU: Löschen v2 */}
                 <button
                     onClick={(event) => handleDeleteV2(event, todo.taskdescription)}
                 >
-                  ❌ v2
+                  ❌
                 </button>
               </li>
           ))}
