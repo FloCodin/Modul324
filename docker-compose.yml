@@ -1,0 +1,10 @@
+services:
+  backend:
+    image: ghcr.io/flocodin/modul324-backend:latest
+    ports:
+      - "8080:8080"
+
+  frontend:
+    image: ghcr.io/flocodin/modul324-frontend:latest
+    ports:
+      - "5173:80"
