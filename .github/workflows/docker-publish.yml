@@ -31,7 +31,7 @@ jobs:
           context: ./backend
           file: ./backend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/modul324-backend:latest
+          tags: ghcr.io/flocodin/modul324-backend:latest
 
       - name: Build and push frontend
         uses: docker/build-push-action@v5
@@ -39,4 +39,4 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/modul324-frontend:latest
+          tags: ghcr.io/flocodin/modul324-frontend:latest
