@@ -30,22 +30,22 @@ public class DemoApplication {
     private final ObjectMapper mapper = new ObjectMapper();
 
     @CrossOrigin
-    @GetMapping("/")
+    @GetMapping("/api/v1/")
     public List<Task> getTasks() {
         return tasks;
     }
 
     @CrossOrigin
-    @PostMapping("/tasks")
+    @PostMapping("/api/v1/tasks")
     public String addTask(@RequestBody String taskJson) {
         try {
-			Task task = mapper.readValue(taskJson, Task.class);
+            Task task = mapper.readValue(taskJson, Task.class);
 
-			// NEU: Leere Beschreibung verhindern
-			if (task.getTaskdescription() == null || task.getTaskdescription().isBlank()) {
-				return "redirect:/";
-			}
-			
+            // NEU: Leere Beschreibung verhindern
+            if (task.getTaskdescription() == null || task.getTaskdescription().isBlank()) {
+                return "redirect:/";
+            }
+
             // Duplikate vermeiden
             if (tasks.stream().anyMatch(t -> t.getTaskdescription().equals(task.getTaskdescription()))) {
                 return "redirect:/";
@@ -60,7 +60,7 @@ public class DemoApplication {
     }
 
     @CrossOrigin
-    @PostMapping("/delete")
+    @PostMapping("/api/v1/delete")
     public String deleteTask(@RequestBody String taskJson) {
         try {
             Task task = mapper.readValue(taskJson, Task.class);
@@ -77,6 +77,43 @@ public class DemoApplication {
             e.printStackTrace();
         }
 
+        return "redirect:/";
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/v2/delete")
+    public String deleteTaskV2(@RequestBody String taskJson) {
+        try {
+            Task task = mapper.readValue(taskJson, Task.class);
+
+            boolean removed = tasks.removeIf(t -> t.getTaskdescription().equals(task.getTaskdescription()));
+
+            // NEU: Deutliche Rückmeldung in v2 (z. B. für Frontend-Toast oder Logging)
+            if (removed) {
+                return "Task erfolgreich gelöscht (v2)";
+            } else {
+                return "Task nicht gefunden (v2)";
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return "Fehler beim Verarbeiten der Anfrage (v2)";
+        }
+    }
+
+    @CrossOrigin
+    @PostMapping("/api/v1/watch")
+    public String toggleWatch(@RequestBody String taskJson) {
+        try {
+            Task incoming = mapper.readValue(taskJson, Task.class);
+            for (Task task : tasks) {
+                if (task.getTaskdescription().equals(incoming.getTaskdescription())) {
+                    task.setWatched(incoming.isWatched());
+                    break;
+                }
+            }
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         return "redirect:/";
     }
 }

@@ -19,25 +19,25 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class DemoApplicationTests {
 
 	@Autowired
-    private MockMvc mockMvc;
+	private MockMvc mockMvc;
 
-    @Test
-    void testGetTasksReturnsEmptyList() throws Exception {
-        mockMvc.perform(get("/"))
-               .andExpect(status().isOk())
-               .andExpect(content().json("[]"));
-    }
+	@Test
+	void testGetTasksReturnsEmptyList() throws Exception {
+		mockMvc.perform(get("/api/v1/"))
+				.andExpect(status().isOk())
+				.andExpect(content().json("[]"));
+	}
 
 	@Test
 	void testAddTaskWithCreatedAt() throws Exception {
 		String taskJson = "{\"taskdescription\":\"Test-Aufgabe\",\"createdAt\":\"2025-06-21\"}";
 
-		mockMvc.perform(post("/tasks")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(taskJson))
+		mockMvc.perform(post("/api/v1/tasks")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(taskJson))
 				.andExpect(status().isOk());
 
-		mockMvc.perform(get("/"))
+		mockMvc.perform(get("/api/v1/"))
 				.andExpect(status().isOk())
 				.andExpect(content().json("[{\"taskdescription\":\"Test-Aufgabe\",\"createdAt\":\"2025-06-21\"}]"));
 	}
@@ -51,12 +51,12 @@ class DemoApplicationTests {
 	void testAddEmptyTaskShouldNotBeAdded() throws Exception {
 		String emptyTaskJson = "{\"taskdescription\":\"\", \"createdAt\":\"2025-06-21\"}";
 
-		mockMvc.perform(post("/tasks")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(emptyTaskJson))
+		mockMvc.perform(post("/api/v1/tasks")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(emptyTaskJson))
 				.andExpect(status().isOk());
 
-		mockMvc.perform(get("/"))
+		mockMvc.perform(get("/api/v1/"))
 				.andExpect(status().isOk())
 				.andExpect(content().json("[]"));
 	}
